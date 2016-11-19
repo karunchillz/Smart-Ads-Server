@@ -89,19 +89,6 @@ app.get('/Neutral.mp4',function(req,res){
     });
 });
 
-app.post('/image', function(req,res) {
-    var base64 = req.body.imageData.replace(/^data:image\/(png|jpg|jpeg|1);base64,/, "");
-    var bitmap = new Buffer(base64, 'base64');
-    fs.writeFile("image/temp.jpg", bitmap, function(err) {
-        console.log('file return');
-        fs.readFile('image/temp.jpg', function (error, data) {
-            if (error) throw error;
-            publish(data);
-        });
-    });
-    res.send(res.body);
-});
-
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
@@ -109,13 +96,20 @@ app.use(function(req, res, next) {
     next(err);
 });
 
-
 /// ibm connection
 var deviceClient = new Client.IotfDevice(config);
 
 deviceClient.connect();
  
-function publish(data) {
+deviceClient.on('connect', function () {
+    console.log('Connect to server');
+});
+
+deviceClient.on('disconnect', function() {
+    deviceClient.connect();
+});
+
+var publish = function(data) {
     deviceClient.publish(
         "frame", 
         "buffer",
@@ -123,56 +117,58 @@ function publish(data) {
         2
     );
     console.log('push an event');
-}
+};
 
-deviceClient.on('connect', function () {
-    console.log('Connect to server');
-    // fs.readFile('image/female_old.jpg', function (err, data) {
-    //     if (err) throw err;
-    //     publish(data);
-    // });
-    // fs.readFile('image/male_old.jpg', function (err, data) {
-    //     if (err) throw err;
-    //     publish(data);
-    // });
-    // fs.readFile('image/female_young.png', function (err, data) {
-    //     if (err) throw err;
-    //     publish(data);
-    // });
-    fs.readFile('image/male_young.jpg', function (err, data) {
-        if (err) throw err;
-        publish(data);
-        console.log('on connect: ', data);
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
+var visionFlag = true;
+
+io.on('connection', function(socket){
+
+    app.post('/image', function(req,res) {
+        socket.emit('live-image', { base64Image: 'req.body.imageData' });
+        socket.emit('intel-emotion', { emotion: 'Happiness' });
+
+        if(visionFlag){
+            var base64 = req.body.imageData.replace(/^data:image\/(png|jpg|jpeg|1);base64,/, "");
+            var bitmap = new Buffer(base64, 'base64');
+            fs.writeFile("image/temp.jpg", bitmap, function(err) {
+                console.log('file return');
+                fs.readFile('image/temp.jpg', function (error, data) {
+                    if (error) throw error;
+                    publish(data);
+                });
+            });
+            res.send(res.body);
+        }else{
+            res.send('Hello');
+        }
+
     });
-    // fs.readFile('image/party.jpg', function (err, data) {
-    //     if (err) throw err;
-    //     publish(data);
-    //     console.log('on connect: ', data);
-    // });
-    // setInterval(function() {console.log('wait')}, 1000);
-});
 
-deviceClient.on('disconnect', function() {
-    deviceClient.connect();
-})
+    deviceClient.on("command", function (commandName,format,payload,topic) {
+        if(commandName === "face") {
+            var data = JSON.parse(payload);
+            imageProcessor.getGenderAndAge(data).then(function(data) {
+                socket.emit('intel-data', data);
+                socket.emit('intel-status', { status: 'Medium' });
+                visionFlag = false;
+                console.log(data);
+            })            
+            console.log(data.images[0].image);
+        } else {
+            console.log("Command not supported.. " + commandName);
+        }
+    });
 
-deviceClient.on("command", function (commandName,format,payload,topic) {
+    socket.on('videoEnded', function (data) {
+        setTimeout(function(){
+            visionFlag = true;
+        },10000);
+        console.log(data);
+    });
 
-    if(commandName === "face") {
-
-        var data = JSON.parse(payload);
-        imageProcessor.getGenderAndAge(data).then(function(data) {
-            console.log(data);
-        })
-                   
-        console.log(data.images[0].image);
-        // fs.writeFile('image/face.jpg', data.images[0].image, function(err) {
-        //     console.log('write face image back');
-        // })
-        // console.log(result);
-    } else {
-        console.log("Command not supported.. " + commandName);
-    }
 });
 
 // development error handler
