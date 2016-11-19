@@ -12,7 +12,7 @@ $(document).ready(function(){
 		}
 	},10000);
 
-	var socket = io('https://atthackathon.localtunnel.me');
+	var socket = io('https://memes.localtunnel.me');
 
 	socket.on('intel-data', function(msg){
 		console.log('intel-data',msg);
