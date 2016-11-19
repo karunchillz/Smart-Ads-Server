@@ -15,10 +15,11 @@ $(document).ready(function(){
 	var socket = io('http://0b7b7be9.ngrok.io');
 
 	socket.on('intel-data', function(msg){
+		console.log('intel-data',msg);
     	$('#messages').append($('<li>').text(msg));
 		$('.intel-row.gender').html('Gender :'+msg.gender);
 		$('.intel-row.age').html('Age :'+msg.age);
-		$('.custom-video source')[0].attr('src',msg.video);
+		$('.custom-video source')[0].src = msg.video;
 		var customVideo = $('.custom-video')[0];
 		customVideo.load();
 		customVideo.play();
