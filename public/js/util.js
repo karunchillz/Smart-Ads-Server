@@ -12,7 +12,7 @@ $(document).ready(function(){
 		}
 	},10000);
 
-	var socket = io('http://d65d89c3.ngrok.io');
+	var socket = io('https://atthackathon.localtunnel.me');
 
 	socket.on('intel-data', function(msg){
 		console.log('intel-data',msg);
