@@ -39,7 +39,9 @@ app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use('/', routes);
 app.use('/users', users);
 
-
+app.get('/display',function(req,res){
+    res.render('display');
+});
 
 app.post('/image', function(req,res) {
     var base64 = req.body.imageData.replace(/^data:image\/(png|jpg|jpeg|1);base64,/, "");
