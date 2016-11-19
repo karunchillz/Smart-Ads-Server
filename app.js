@@ -109,8 +109,10 @@ app.post('/image', function(req,res) {
 
     var base64 = req.body.imageData.replace(/^data:image\/(png|jpg|jpeg|1);base64,/, "");
     emotion.getEmotion(base64).then(function(data) {
-        console.log(data);
-        io.emit('intel-emotion', { emotion: data.emotion });    
+      console.log(data);
+      io.emit('intel-emotion', { emotion: data.emotion });    
+    }).catch((e) => {
+      io.emit('intel-emotion', { emotion: 'not detected' });    
     })
 
     if(visionFlag){
