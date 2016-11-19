@@ -22,7 +22,7 @@ $(document).ready(function(){
 		var customVideo = $('.custom-video')[0];
 		customVideo.load();
 		customVideo.play();
-		customVideo..onended = function() {
+		customVideo.onended = function() {
     		socket.emit('videoEnded',{});
     		imageSlide = true;
 			if($('.slide-show').hasClass('hide'))

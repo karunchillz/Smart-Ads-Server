@@ -46,6 +46,10 @@ app.get('/display',function(req,res){
     res.render('display');
 });
 
+app.get('/admin',function(req,res){
+    res.render('admin');
+});
+
 app.get('/Neutral.mp4',function(req,res){
     var imageName = 'Neutral.mp4';
 
