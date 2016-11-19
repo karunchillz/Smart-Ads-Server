@@ -84,9 +84,18 @@ function getEmotion(base64) {
         }, {});
         let result = Object.keys(accumulator)
         .map(function(key) {
-          return {emotion: key, value:accumulator[key]}
-        });
-
+          // console.log({emotion: key, value:accumulator[key]});
+          return ({emotion: key, value:accumulator[key]});
+        })
+        .reduce(function(acc, cur) {
+          if (!acc.value) return cur;
+          else {
+            if (cur.value > acc.value) {
+              return cur;
+            }
+            return acc;
+          }
+        }, {});
 
 
         // console.log(highestHappiness);
@@ -94,7 +103,7 @@ function getEmotion(base64) {
         // if (highestHappiness >= 0.7) {
         //   result = true;
         // }
-
+        // console.log(result);
         resolve(result);  
       }
 
