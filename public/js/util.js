@@ -12,7 +12,7 @@ $(document).ready(function(){
 		}
 	},10000);
 
-	var socket = io('http://06cb5375.ngrok.io/');
+	var socket = io('http://0b7b7be9.ngrok.io');
 
 	socket.on('intel-data', function(msg){
     	$('#messages').append($('<li>').text(msg));
