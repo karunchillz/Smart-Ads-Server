@@ -12,7 +12,7 @@ $(document).ready(function(){
 		}
 	},10000);
 
-	var socket = io('https://memes.localtunnel.me');
+	var socket = io('http://e4da2a34.ngrok.io');
 
 	socket.on('intel-data', function(msg){
 		console.log('intel-data',msg);

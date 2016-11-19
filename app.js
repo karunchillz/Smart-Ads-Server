@@ -16,10 +16,10 @@ var imageProcessor = require('./imageProcessor.js');
 
 var Client = require("ibmiotf");
 var config = {
-    "org" : "go6dmz",
+    "org" : "k3syur",
     "id" : "777-777-7777",
     "domain": "internetofthings.ibmcloud.com",
-    "type" : "Phone",
+    "type" : "Raspberry",
     "auth-method" : "token",
     "auth-token" : "123456789"
 };
@@ -148,7 +148,11 @@ deviceClient.on('connect', function () {
 });
 
 deviceClient.on('disconnect', function() {
-    deviceClient.connect();
+    //deviceClient.connect();
+});
+
+deviceClient.on('error', function(err) {
+    console.log(err);
 });
 
 var publish = function(data) {
@@ -179,9 +183,14 @@ deviceClient.on("command", function (commandName,format,payload,topic) {
     if(commandName === "face") {
         var data = JSON.parse(payload);
         imageProcessor.getInfo(data).then(function(data) {
-            io.emit('intel-data', data);
-            io.emit('intel-status', { status: 'Medium' });
-            visionFlag = false;
+            if(Object.keys(data).length === 0){
+                console.log('visualFlag on');
+            }else{
+                console.log('visualFlag off');
+                io.emit('intel-data', data);
+                io.emit('intel-status', { status: 'Medium' });                
+                visionFlag = false;
+            }
             console.log(data);
         })            
         console.log(data.images[0].image);
