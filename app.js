@@ -104,7 +104,7 @@ var visionFlag = true;
 
 app.post('/image', function(req,res) {
     console.log('Inside /image');
-    io.emit('live-image', { base64Image: 'req.body.imageData' });
+    io.emit('live-image', { base64Image: req.body.imageData });
     io.emit('intel-emotion', { emotion: 'Happiness' });
 
     if(visionFlag){
