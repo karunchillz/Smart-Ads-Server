@@ -105,10 +105,15 @@ var visionFlag = true;
 app.post('/image', function(req,res) {
     console.log('Inside /image');
     io.emit('live-image', { base64Image: 'req.body.imageData' });
-    io.emit('intel-emotion', { emotion: 'Happiness' });
+
+    var base64 = req.body.imageData.replace(/^data:image\/(png|jpg|jpeg|1);base64,/, "");
+    emotion.getEmotion(base64).then(function(data) {
+        console.log(data);
+        io.emit('intel-emotion', { emotion: data.emotion });    
+    })
+    
 
     if(visionFlag){
-        var base64 = req.body.imageData.replace(/^data:image\/(png|jpg|jpeg|1);base64,/, "");
         var bitmap = new Buffer(base64, 'base64');
         fs.writeFile("image/temp.jpg", bitmap, function(err) {
             console.log('file return');
@@ -123,26 +128,6 @@ app.post('/image', function(req,res) {
     }
 
 });
-
-// app.post('/image', function(req,res) {
-//     var base64 = req.body.imageData.replace(/^data:image\/(png|jpg|jpeg|1);base64,/, "");
-
-//     // microsoft image processing
-//     emotion.getEmotion(base64).then(function(data) {
-//         console.log(data);
-//     });
-
-//     // ibm watson processing
-//     var bitmap = new Buffer(base64, 'base64');
-//     fs.writeFile("image/temp.jpg", bitmap, function(err) {
-//         console.log('file return');
-//         fs.readFile('image/temp.jpg', function (error, data) {
-//             if (error) throw error;
-//             publish(data);
-//         });
-//     });
-//     res.send("Done");
-// });
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
