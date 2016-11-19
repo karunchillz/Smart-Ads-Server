@@ -12,7 +12,11 @@ $(document).ready(function(){
 		}
 	},10000);
 
+<<<<<<< HEAD
 	var socket = io('http://e4da2a34.ngrok.io');
+=======
+	var socket = io('http://37aa2c27.ngrok.io');
+>>>>>>> 8a0ffb04e1c6967447e5efc9fe6589783a5e738b
 
 	socket.on('intel-data', function(msg){
 		console.log('intel-data',msg);
@@ -53,7 +57,7 @@ $(document).ready(function(){
   	});  	
 
  	socket.on('intel-emotion', function(msg){
-    	$('.intel-row.emotion').html('Emotion :'+msg.emotion);
+    	$('.intel-row.emotion').html('Emotion :' + msg.emotion || 'not detected');
   	});
   	
  	socket.on('intel-status', function(msg){

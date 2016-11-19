@@ -62,7 +62,7 @@ function getEmotion(base64) {
       // console.log(JSON.stringify(JSON.parse(response.body), null, 2));
 
       if (JSON.parse(body).error) {
-        reject('invalid base64!');
+        reject({emotion: 'Neutral'});
       } else {
 
         let accumulator = JSON.parse(response.body)

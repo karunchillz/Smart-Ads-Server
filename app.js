@@ -118,9 +118,9 @@ app.post('/image', function(req,res) {
     if(visionFlag){
         var bitmap = new Buffer(base64, 'base64');
         fs.writeFile("image/temp.jpg", bitmap, function(err) {
-            console.log('file return');
             fs.readFile('image/temp.jpg', function (error, data) {
-                if (error) throw error;
+                console.log(data);
+                if (error) console.log(error);
                 publish(data);
             });
         });
@@ -145,6 +145,11 @@ deviceClient.connect();
  
 deviceClient.on('connect', function () {
     console.log('Connect to server');
+    // fs.readFile('image/male_young.jpg', function (error, data) {
+    //     console.log(data);
+    //     if (error) console.log(error);
+    //     publish(data);
+    // });
 });
 
 deviceClient.on('disconnect', function() {
@@ -192,8 +197,8 @@ deviceClient.on("command", function (commandName,format,payload,topic) {
                 visionFlag = false;
             }
             console.log(data);
-        })            
-        console.log(data.images[0].image);
+        })
+        // console.log(data.images[0].image);
     } else {
         console.log("Command not supported.. " + commandName);
     }
