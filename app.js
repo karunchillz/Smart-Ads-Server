@@ -93,7 +93,6 @@ app.get('/Neutral.mp4',function(req,res){
     });
 });
 
-<<<<<<< HEAD
 app.post('/image', function(req,res) {
     var base64 = req.body.imageData.replace(/^data:image\/(png|jpg|jpeg|1);base64,/, "");
 
@@ -114,8 +113,6 @@ app.post('/image', function(req,res) {
     res.send("Done");
 });
 
-=======
->>>>>>> c9d0470ed93dcf097644311d9909934d6184adc5
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
