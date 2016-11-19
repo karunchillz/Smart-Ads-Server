@@ -19,7 +19,7 @@ $(document).ready(function(){
     	$('#messages').append($('<li>').text(msg));
 		$('.intel-row.gender').html('Gender :'+msg.gender);
 		$('.intel-row.age').html('Age :'+msg.age);
-		$('.custom-video source')[0].src = msg.video;
+		$('.custom-video source')[0].src = msg.link;
 		var customVideo = $('.custom-video')[0];
 		customVideo.load();
 		customVideo.play();

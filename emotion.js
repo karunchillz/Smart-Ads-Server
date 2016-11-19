@@ -21,7 +21,7 @@ function isSmile(base64) {
       // console.log(JSON.stringify(JSON.parse(response.body), null, 2));
 
       if (JSON.parse(body).error) {
-        reject('invalid base64!');
+        reject({emotion: 'neutral'});
       } else {
 
         const faces = JSON.parse(response.body);

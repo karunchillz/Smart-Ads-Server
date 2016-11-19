@@ -30,14 +30,14 @@ function getLink(data) {
 	let isMale = gender === 'MALE';
 
 	if (averageAge < 18) {
-		return prefix + 'game.mp4';
+		return prefix + 'Google.mp4';
 	} else if (averageAge >= 18 && averageAge < 55) {
 		if (isMale)
-			return prefix + 'car.mp4';
+			return prefix + 'Neutral.mp4';
 		else
-			return prefix + 'fashion.mp4';
+			return prefix + 'Women2.mp4';
 	} else {
-		return prefix + 'retirement.mp4';
+		return prefix + 'IBM.mp4';
 	}
 
 }
