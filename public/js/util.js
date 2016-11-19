@@ -12,24 +12,50 @@ $(document).ready(function(){
 		}
 	},10000);
 
-	$('.live-image').on('click',function(event){
-		// Pause and Hide the Image Slider
+	var socket = io('http://06cb5375.ngrok.io/');
+
+	socket.on('intel-data', function(msg){
+    	$('#messages').append($('<li>').text(msg));
+		$('.intel-row.gender').html('Gender :'+msg.gender);
+		$('.intel-row.age').html('Age :'+msg.age);
+		$('.custom-video source')[0].attr('src',msg.video);
+		var customVideo = $('.custom-video')[0];
+		customVideo.load();
+		customVideo.play();
+		customVideo..onended = function() {
+    		socket.emit('videoEnded',{});
+    		imageSlide = true;
+			if($('.slide-show').hasClass('hide'))
+				$('.slide-show').toggleClass('hide');
+			if(!$('.intel-data').hasClass('hide'))
+				$('.intel-data').toggleClass('hide');
+			if(!$('.live-image').hasClass('hide'))
+				$('.live-image').toggleClass('hide');		
+			if(!$('.video-show').hasClass('hide'))
+				$('.video-show').toggleClass('hide');    		
+		};
+
 		imageSlide = false;
-		$('.slide-show').toggleClass('hide');
+		if(!$('.slide-show').hasClass('hide'))
+			$('.slide-show').toggleClass('hide');
+		if($('.intel-data').hasClass('hide'))
+			$('.intel-data').toggleClass('hide');
+		if($('.live-image').hasClass('hide'))
+			$('.live-image').toggleClass('hide');		
+		if($('.video-show').hasClass('hide'))
+			$('.video-show').toggleClass('hide');
+			
+  	});
 
-		// Set and Show the Intel Data
-		$('.intel-row.gender').html('Gender : Male');
-		$('.intel-row.age').html('Age : 25');
-		$('.intel-row.emotion').html('Emotion : Happiness');
-		$('.intel-row.status').html('Status : Neutral');
-		$('.intel-data').toggleClass('hide');
+	socket.on('live-image', function(msg){
+		$('.custom-image').attr('src',msg.base64Image);
+  	});  	
 
-		// Set and Show the Live Image
-		$('.custom-image').attr('src','images/att.jpg');
-		$('.live-image').toggleClass('hide');
-
-		// Reset and Show the 
-		$('.custom-video').load();
-		$('.video-show').toggleClass('hide');
-	});
+ 	socket.on('intel-emotion', function(msg){
+    	$('.intel-row.emotion').html('Emotion :'+msg.emotion);
+  	});
+  	
+ 	socket.on('intel-status', function(msg){
+    	$('.intel-row.status').html('Status : '+msg.status);
+  	});
 });
