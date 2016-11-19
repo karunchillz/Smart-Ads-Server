@@ -12,7 +12,7 @@ $(document).ready(function(){
 		}
 	},10000);
 
-	var socket = io('https://memes.localtunnel.me');
+	var socket = io('http://37aa2c27.ngrok.io');
 
 	socket.on('intel-data', function(msg){
 		console.log('intel-data',msg);
@@ -53,7 +53,7 @@ $(document).ready(function(){
   	});  	
 
  	socket.on('intel-emotion', function(msg){
-    	$('.intel-row.emotion').html('Emotion :'+msg.emotion);
+    	$('.intel-row.emotion').html('Emotion :' + msg.emotion || 'not detected');
   	});
   	
  	socket.on('intel-status', function(msg){

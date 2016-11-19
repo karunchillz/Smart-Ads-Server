@@ -1,7 +1,7 @@
 
 function getInfo(data) {
 	return new Promise(function(resolve, reject) {
-		if (data.images[0].faces) {
+		if (data.images[0].faces && data.images[0].faces.length > 0) {
 			result = data.images[0].faces
 							.map(function(face) {
 								var age = Math.round((face.age.min + face.age.max) / 2);
@@ -16,7 +16,7 @@ function getInfo(data) {
 			resolve(result);
 		}
 		else {
-			resolve({});
+			reject({});
 		}
 	});
 }

@@ -16,10 +16,10 @@ var imageProcessor = require('./imageProcessor.js');
 
 var Client = require("ibmiotf");
 var config = {
-    "org" : "go6dmz",
+    "org" : "k3syur",
     "id" : "777-777-7777",
     "domain": "internetofthings.ibmcloud.com",
-    "type" : "Phone",
+    "type" : "Raspberry",
     "auth-method" : "token",
     "auth-token" : "123456789"
 };
@@ -118,9 +118,9 @@ app.post('/image', function(req,res) {
     if(visionFlag){
         var bitmap = new Buffer(base64, 'base64');
         fs.writeFile("image/temp.jpg", bitmap, function(err) {
-            console.log('file return');
             fs.readFile('image/temp.jpg', function (error, data) {
-                if (error) throw error;
+                console.log(data);
+                if (error) console.log(error);
                 publish(data);
             });
         });
@@ -145,6 +145,11 @@ deviceClient.connect();
  
 deviceClient.on('connect', function () {
     console.log('Connect to server');
+    // fs.readFile('image/male_young.jpg', function (error, data) {
+    //     console.log(data);
+    //     if (error) console.log(error);
+    //     publish(data);
+    // });
 });
 
 deviceClient.on('disconnect', function() {
@@ -179,12 +184,14 @@ deviceClient.on("command", function (commandName,format,payload,topic) {
     if(commandName === "face") {
         var data = JSON.parse(payload);
         imageProcessor.getInfo(data).then(function(data) {
+            console.log('correct in face:', data);
             io.emit('intel-data', data);
             io.emit('intel-status', { status: 'Medium' });
             visionFlag = false;
-            console.log(data);
-        })            
-        console.log(data.images[0].image);
+        }).catch((error) => {
+          console.log('error in face');
+        })
+        // console.log(data.images[0].image);
     } else {
         console.log("Command not supported.. " + commandName);
     }
