@@ -20,10 +20,10 @@ a {
 .intel-data{
 	position: absolute;
     top: 50px;
-    right: 30px;
+    right: 165px;
     padding: 10px;
     background: white;
-    color: blue;
+    color: black;
     font-size: larger;	
     margin: 10px;
     border: 1px solid blue;    
@@ -32,19 +32,24 @@ a {
 .live-image{
 	position: absolute;
     top: 300px;
-    right: 50px;
+    right: 150px;
     padding: 10px;
     background: white;
-    width: 150px;
-    height: 150px;	
-    margin: 10px;
-    border: 1px solid blue;
+    width: 200px;
+    height: 150px;
 }
 
 .custom-image{
 	width: 100%;
+    padding: 10px;
+    border: 1px solid blue;	
 }
 
 .hide {
 	display:none;
+}
+
+video {
+	width: 800px;
+	height: 600px;
 }
