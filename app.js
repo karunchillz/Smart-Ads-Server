@@ -4,7 +4,7 @@ var favicon = require('static-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var smile = require('./smile.js');
+var emotion = require('./emotion.js');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -91,6 +91,13 @@ app.get('/Neutral.mp4',function(req,res){
 
 app.post('/image', function(req,res) {
     var base64 = req.body.imageData.replace(/^data:image\/(png|jpg|jpeg|1);base64,/, "");
+
+    // microsoft image processing
+    emotion.getEmotion(base64).then(function(data) {
+        console.log(data);
+    });
+
+    // ibm watson processing
     var bitmap = new Buffer(base64, 'base64');
     fs.writeFile("image/temp.jpg", bitmap, function(err) {
         console.log('file return');
@@ -99,7 +106,7 @@ app.post('/image', function(req,res) {
             publish(data);
         });
     });
-    res.send(res.body);
+    res.send("Done");
 });
 
 /// catch 404 and forwarding to error handler
