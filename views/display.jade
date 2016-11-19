@@ -16,8 +16,14 @@ block content
     img.slider-images(src="images/MongoDb.jpg" alt="MongoDb")
     img.slider-images(src="images/RapidApi.jpg" alt="RapidApi")
     img.slider-images(src="images/Chevron.jpg" alt="Chevron")
-  div.intel-data
-    div.intel-row Gender  : #{gender}
-    div.intel-row Age     : #{age}
-    div.intel-row Emotion : #{emotion}
-    div.intel-row Status  : #{income}
+  div.intel-data.hide
+    div.intel-row.gender Gender  : Male#{gender}
+    div.intel-row.age Age     : 25#{age}
+    div.intel-row.emotion Emotion : Happiness#{emotion}
+    div.intel-row.status Status  : Good#{income}
+  div.live-image.hide
+    img.custom-image(src='images/IBM.jpg')
+  div.video-show.hide
+    video.custom-video(controls)
+      source(src="images/Neutral.mp4", type="video/mp4")
+      |Your browser does not support the video tag.

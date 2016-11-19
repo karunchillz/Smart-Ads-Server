@@ -46,6 +46,49 @@ app.get('/display',function(req,res){
     res.render('display');
 });
 
+app.get('/Neutral.mp4',function(req,res){
+    var imageName = 'Neutral.mp4';
+
+    //console.log('videoName',videoName);
+ 
+    var __dirname = 'public/videos';
+    var file = path.resolve(__dirname,videoName);
+
+    fs.stat(file, function(err, stats) {
+      if (err) {
+        if (err.code === 'ENOENT') {
+          // 404 Error if file not found
+          return res.writeHead(404, { "Content-Type": "text/html" });
+        }
+      res.end(err);
+      }
+      var range = req.headers.range;
+      if (!range) {
+       // 416 Wrong range
+       return res.writeHead(416, { "Content-Type": "text/html" });
+      }
+      var positions = range.replace(/bytes=/, "").split("-");
+      var start = parseInt(positions[0], 10);
+      var total = stats.size;
+      var end = positions[1] ? parseInt(positions[1], 10) : total - 1;
+      var chunksize = (end - start) + 1;
+
+      res.writeHead(206, {
+        "Content-Range": "bytes " + start + "-" + end + "/" + total,
+        "Accept-Ranges": "bytes",
+        "Content-Length": chunksize,
+        "Content-Type": "video/mp4"
+      });
+
+      var stream = fs.createReadStream(file, { start: start, end: end })
+        .on("open", function() {
+          stream.pipe(res);
+        }).on("error", function(err) {
+          res.end(err);
+        });
+    });
+});
+
 app.post('/image', function(req,res) {
     var base64 = req.body.imageData.replace(/^data:image\/(png|jpg|jpeg|1);base64,/, "");
     var bitmap = new Buffer(base64, 'base64');
