@@ -11,10 +11,13 @@ var users = require('./routes/users');
 
 var fs = require('fs');
 
+var imageProcessor = require('./imageProcessor.js');
+
 var Client = require("ibmiotf");
 var config = {
     "org" : "go6dmz",
     "id" : "777-777-7777",
+    "domain": "internetofthings.ibmcloud.com",
     "type" : "Phone",
     "auth-method" : "token",
     "auth-token" : "123456789"
@@ -93,7 +96,12 @@ deviceClient.on('connect', function () {
     //     if (err) throw err;
     //     publish(data);
     // });
-    // fs.readFile('image/male_young.jpg', function (err, data) {
+    fs.readFile('image/male_young.jpg', function (err, data) {
+        if (err) throw err;
+        publish(data);
+        console.log('on connect: ', data);
+    });
+    // fs.readFile('image/party.jpg', function (err, data) {
     //     if (err) throw err;
     //     publish(data);
     //     console.log('on connect: ', data);
@@ -108,7 +116,17 @@ deviceClient.on('disconnect', function() {
 deviceClient.on("command", function (commandName,format,payload,topic) {
 
     if(commandName === "face") {
-        console.log(JSON.parse(payload));
+
+        var data = JSON.parse(payload);
+        imageProcessor.getGenderAndAge(data).then(function(data) {
+            console.log(data);
+        })
+                   
+        console.log(data.images[0].image);
+        // fs.writeFile('image/face.jpg', data.images[0].image, function(err) {
+        //     console.log('write face image back');
+        // })
+        // console.log(result);
     } else {
         console.log("Command not supported.. " + commandName);
     }
