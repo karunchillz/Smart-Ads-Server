@@ -1,5 +1,5 @@
 
-function getGenderAndAge(data) {
+function getInfo(data) {
 	return new Promise(function(resolve, reject) {
 		if (data.images[0].faces) {
 			result = data.images[0].faces
@@ -42,4 +42,4 @@ function getLink(data) {
 
 }
 
-exports.getGenderAndAge = getGenderAndAge;
+exports.getInfo = getInfo;

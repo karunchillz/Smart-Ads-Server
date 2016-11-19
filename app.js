@@ -176,7 +176,7 @@ io.on('connection', function(socket){
 deviceClient.on("command", function (commandName,format,payload,topic) {
     if(commandName === "face") {
         var data = JSON.parse(payload);
-        imageProcessor.getGenderAndAge(data).then(function(data) {
+        imageProcessor.getInfo(data).then(function(data) {
             io.emit('intel-data', data);
             io.emit('intel-status', { status: 'Medium' });
             visionFlag = false;
